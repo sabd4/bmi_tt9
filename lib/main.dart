@@ -1,4 +1,5 @@
 import 'package:bmi_tt9/constants.dart';
+import 'package:bmi_tt9/widgets/My_Fab.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(BMICalculator());
@@ -193,22 +194,14 @@ class _InputPageState extends State<InputPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            FloatingActionButton(
-                                onPressed: () {},
-                                child: Text(
-                                  "+",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16),
-                                )),
-                            FloatingActionButton(
-                                onPressed: () {},
-                                child: Text(
-                                  "-",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16),
-                                )),
+                            MyFab(
+                              onPressed: () {},
+                              icon: Icons.add,
+                            ),
+                            MyFab(
+                              onPressed: () {},
+                              icon: Icons.remove,
+                            ),
                           ],
                         ),
                       ],
