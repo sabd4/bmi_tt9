@@ -1,22 +1,26 @@
 import 'package:flutter/material.dart';
 
-class MyFab extends StatelessWidget {
-  const MyFab({
+import '../constants.dart';
+
+class MyFAB extends StatelessWidget {
+  IconData icon;
+  Function() function;
+  MyFAB({
     Key? key,
-    required this.onPressed,
     required this.icon,
+    required this.function,
   }) : super(key: key);
-  final Function() onPressed;
-  final IconData icon;
+
   @override
   Widget build(BuildContext context) {
     return RawMaterialButton(
-      constraints: BoxConstraints(minWidth: 36, minHeight: 36),
-      padding: EdgeInsets.all(16),
-      shape: CircleBorder(),
-      fillColor: Colors.pinkAccent,
-      onPressed: onPressed,
-      child: Icon(icon),
+      elevation: 10,
+      constraints: const BoxConstraints(minWidth: 36.0, minHeight: 36.0),
+      padding: const EdgeInsets.all(16),
+      shape: const CircleBorder(),
+      fillColor: myFabC,
+      onPressed: function,
+      child: Center(child: Icon(icon)),
     );
   }
 }

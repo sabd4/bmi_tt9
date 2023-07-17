@@ -1,209 +1,196 @@
 import 'package:bmi_tt9/Widgets/my_card.dart';
+import 'package:bmi_tt9/pages/result.dart';
 import 'package:flutter/material.dart';
 
-class InputPage extends StatefulWidget {
+import '../bmi_brain.dart';
+import '../constants.dart';
+import '../widgets/gender_button.dart';
+import '../widgets/my_card.dart';
+
+class BMIcalc extends StatefulWidget {
+  const BMIcalc({super.key});
+
   @override
-  _InputPageState createState() => _InputPageState();
+  State<BMIcalc> createState() => _BMIcalcState();
 }
 
-class _InputPageState extends State<InputPage> {
-  bool? isMale;
-  int? height;
-  int? weight;
-  int? age;
+class _BMIcalcState extends State<BMIcalc> {
+  BMIbrain brain = BMIbrain();
+  bool isclicked = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('BMI CALCULATOR'),
-        ),
-        body: Column(
+      appBar: AppBar(
+        title: const Text('BMI CALCULATOR'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
           children: [
             Row(
               children: [
                 Expanded(
-                    child: MyCard(
-                  onTap: () {},
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.male,
-                        size: 60,
-                      ),
-                      SizedBox(
-                        height: 8,
-                      ),
-                      Text("Male")
-                    ],
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        isclicked = !isclicked;
+                        brain.setGender('male');
+                      });
+                    },
+                    child: GenderButton(
+                      icon: Icons.male,
+                      text: 'Male',
+                      isClicked: isclicked,
+                      bgcolor: isclicked
+                          ? buttonBackground.withOpacity(0.6)
+                          : buttonBackground,
+                      textcolor: isclicked ? greyc : Colors.white,
+                    ),
                   ),
-                )),
+                ),
                 Expanded(
-                    child: MyCard(
-                  onTap: () {},
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.female,
-                        size: 60,
-                      ),
-                      SizedBox(
-                        height: 8,
-                      ),
-                      Text("Female")
-                    ],
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        isclicked = !isclicked;
+                        brain.setGender("female");
+                      });
+                    },
+                    child: GenderButton(
+                      icon: Icons.female,
+                      text: 'Female',
+                      isClicked: !isclicked,
+                      bgcolor: !isclicked
+                          ? buttonBackground.withOpacity(0.6)
+                          : buttonBackground,
+                      textcolor: !isclicked ? greyc : Colors.white,
+                    ),
                   ),
-                )),
+                ),
               ],
             ),
             Expanded(
-              child: Container(
-                  margin: EdgeInsets.all(12),
-                  padding: EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: Colors.grey,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        "HEIGHT",
-                        style: TextStyle(fontSize: 24),
+                child: Container(
+              margin: const EdgeInsets.symmetric(vertical: 16),
+              decoration: BoxDecoration(
+                  color: buttonBackground,
+                  borderRadius: BorderRadius.circular(10)),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 24.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Hight",
+                          style: TextStyle(color: Colors.white, fontSize: 24),
+                        )
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "${brain.getHieght().toInt()} cm",
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 32,
+                              fontWeight: FontWeight.bold),
+                        )
+                      ],
+                    ),
+                    SliderTheme(
+                      data: const SliderThemeData(
+                        trackHeight: 2,
+                        trackShape: RectangularSliderTrackShape(),
                       ),
-                      SizedBox(
-                        height: 8,
+                      child: Slider(
+                        min: 100,
+                        max: 200,
+                        value: brain.getHieght(),
+                        onChanged: (v) {
+                          setState(() {
+                            brain.setHieght(v);
+                          });
+                        },
+                        activeColor: Colors.white.withOpacity(0.8),
+                        inactiveColor: Colors.white.withOpacity(0.4),
+                        thumbColor: sliderColor,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.baseline,
-                        textBaseline: TextBaseline.alphabetic,
-                        children: [
-                          Text(
-                            "150",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 54),
-                          ),
-                          Text(
-                            "cm",
-                            style: TextStyle(),
-                          ),
-                        ],
-                      ),
-                      Slider(value: 0.3, onChanged: (value) {}),
-                    ],
-                  )),
-            ),
+                    )
+                  ],
+                ),
+              ),
+            )),
             Row(
               children: [
                 Expanded(
-                  child: Container(
-                    margin: EdgeInsets.all(12),
-                    padding: EdgeInsets.all(24),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: Colors.grey,
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("WEIGHT"),
-                        SizedBox(
-                          height: 4,
-                        ),
-                        Text(
-                          "60",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 40),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            FloatingActionButton(
-                                onPressed: () {},
-                                child: Text(
-                                  "+",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16),
-                                )),
-                            FloatingActionButton(
-                                onPressed: () {},
-                                child: Text(
-                                  "-",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16),
-                                )),
-                          ],
-                        ),
-                      ],
-                    ),
+                  child: MyContainer(
+                    number: brain.getWieght(),
+                    text: 'Wieght',
+                    add: () {
+                      setState(() {
+                        brain.setWieght(brain.getWieght() + 1);
+                      });
+                    },
+                    sub: () {
+                      setState(() {
+                        brain.setWieght(brain.getWieght() - 1);
+                      });
+                    },
                   ),
                 ),
                 Expanded(
-                  child: Container(
-                    margin: EdgeInsets.all(12),
-                    padding: EdgeInsets.all(24),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: Colors.grey,
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Age"),
-                        SizedBox(
-                          height: 4,
-                        ),
-                        Text(
-                          "20",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 40),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            FloatingActionButton(
-                                onPressed: () {},
-                                child: Text(
-                                  "+",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16),
-                                )),
-                            FloatingActionButton(
-                                onPressed: () {},
-                                child: Text(
-                                  "-",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16),
-                                )),
-                          ],
-                        ),
-                      ],
-                    ),
+                  child: MyContainer(
+                    number: brain.getAge(),
+                    text: 'Age',
+                    add: () {
+                      setState(() {
+                        brain.setAge(brain.getAge() + 1);
+                      });
+                    },
+                    sub: () {
+                      setState(() {
+                        brain.setAge(brain.getAge() - 1);
+                      });
+                    },
                   ),
                 ),
               ],
             ),
-            Container(
-              height: 80,
+            const SizedBox(
+              height: 20,
+            ),
+            SizedBox(
               width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.red,
-              ),
-              child: Center(
-                child: Text(
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: sliderColor,
+                    padding: const EdgeInsets.all(16)),
+                child: const Text(
                   "Calculate",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                  style: TextStyle(color: Colors.white, fontSize: 24),
                 ),
+                onPressed: () {
+                  brain.calcBmi();
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => Result(
+                              type: brain.type,
+                              result: brain.result,
+                              range: brain.range,
+                              message: brain.m,
+                              tColor: brain.tcolor)));
+                },
               ),
             )
           ],
-        ));
+        ),
+      ),
+    );
   }
 }
